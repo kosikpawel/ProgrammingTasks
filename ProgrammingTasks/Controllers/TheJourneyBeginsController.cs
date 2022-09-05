@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace ProgrammingTasks.Controllers
 {
@@ -22,6 +23,13 @@ namespace ProgrammingTasks.Controllers
 
             int result = modulo == 0 ? century : century + 1;
 
+            return Ok(result);
+        }
+
+        [HttpGet("checkPalindrome/{inputString}")]
+        public ActionResult<bool> CheckPalindrome([FromRoute] string inputString)
+        {
+            bool result = inputString.SequenceEqual(inputString.Reverse());
             return Ok(result);
         }
     }
