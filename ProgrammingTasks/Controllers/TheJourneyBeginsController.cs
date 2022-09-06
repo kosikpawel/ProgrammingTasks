@@ -5,7 +5,7 @@ using System.Linq;
 namespace ProgrammingTasks.Controllers
 {
     [ApiController]
-    [Route("TheJourneyBegins")]
+    [Route("api/theJourneyBegins")]
     public class TheJourneyBeginsController : ControllerBase
     {
         private readonly ITheJourneyBeginsService _theJourneyBeginsService;
