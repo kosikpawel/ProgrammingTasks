@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ProgrammingTasks.Entities;
 using ProgrammingTasks.Services;
 using System;
 using System.Collections.Generic;
@@ -28,8 +29,9 @@ namespace ProgrammingTasks
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ITheJourneyBeginsService, TheJourneyBeginsService>();
-
             services.AddControllers();
+            services.AddDbContext<TaskDbContext>();
+            services.AddScoped<TaskSeeder>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProgrammingTasks", Version = "v1" });
@@ -37,8 +39,9 @@ namespace ProgrammingTasks
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, TaskSeeder seeder)
         {
+            seeder.Seed();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
