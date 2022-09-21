@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProgrammingTasks.Entities;
 using ProgrammingTasks.Models;
+using ProgrammingTasks.Services;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,20 +13,17 @@ namespace ProgrammingTasks.Controllers
     [Route("api/task")]
     public class TaskController : ControllerBase
     {
-        private readonly TaskDbContext _taskDbContext;
-        private readonly IMapper _mapper;
-        public TaskController(TaskDbContext taskDbContext, IMapper mapper)
+        private readonly ITaskService _taskService;
+
+        public TaskController(ITaskService taskService)
         {
-            _taskDbContext = taskDbContext;
-            _mapper = mapper;
+            _taskService = taskService;
         }
 
         [HttpGet("allTasks")]
         public ActionResult<IEnumerable<TaskDto>> GetAllTasks()
         {
-            var tasks = _taskDbContext.Tasks.Include(t => t.Tests).ToList();
-
-            var tasksDtos = _mapper.Map<List<TaskDto>>(tasks);
+            var tasksDtos = _taskService.GetAllTasks();
 
             return Ok(tasksDtos);
         }
@@ -33,16 +31,51 @@ namespace ProgrammingTasks.Controllers
         [HttpGet("getTask/{taskId}")]
         public ActionResult<TaskDto> GetTask([FromRoute] int taskId)
         {
-            var task =  _taskDbContext.Tasks.Include(t => t.Tests).FirstOrDefault(t => t.Id == taskId);
+            var task = _taskService.GetTask(taskId);
 
-            if (task == null)
+            return Ok(task);
+        }
+
+        [HttpPost]
+        public ActionResult CreateTask([FromBody] CreateTaskDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var id = _taskService.CreateTask(dto);
+
+            return Created($"/api/task/getTask/{id}", null);
+        }
+
+        [HttpDelete("deleteTask/{id}")]
+        public ActionResult DeleteTask([FromRoute] int id)
+        {
+            var result = _taskService.DeleteTask(id);
+
+            if (result == false)
             {
                 return NotFound();
             }
 
-            var taskDto = _mapper.Map<TaskDto>(task);
+            return NoContent();
+        }
 
-            return Ok(taskDto);
+        [HttpPut("modifyTask/{id}")]
+        public ActionResult ModifyTask([FromBody] ModifyTaskDto dto, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            bool result = _taskService.ModifyTask(dto, id);
+
+            if (result == false)
+                return NotFound();
+
+            return Ok();
         }
     }
 }

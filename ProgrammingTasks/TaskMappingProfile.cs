@@ -10,6 +10,9 @@ namespace ProgrammingTasks
         {
             CreateMap<Task, TaskDto>();
             CreateMap<Test, TestDto>();
+
+            CreateMap<CreateTaskDto, Task>();
+            CreateMap<CreateTestDto, Test>();
         }
     }
 }
