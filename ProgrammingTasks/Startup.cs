@@ -30,6 +30,7 @@ namespace ProgrammingTasks
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ITheJourneyBeginsService, TheJourneyBeginsService>();
+            services.AddTransient<IEdgeOfTheOceanService, EdgeOfTheOceanService>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddControllers();
             services.AddDbContext<TaskDbContext>();
