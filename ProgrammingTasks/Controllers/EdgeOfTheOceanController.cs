@@ -14,7 +14,7 @@ namespace ProgrammingTasks.Controllers
             _edgeOfTheOceanService = edgeOfTheOceanService;
         }
 
-        //["3", "6", "-2", "-5", "7", "3"] postman body json raw
+        //postman body json raw
         [HttpGet("adjacentElementsProduct")]
         public ActionResult<int> AdjacentElementsProduct([FromBody] int[] inputArray)
         {
@@ -27,5 +27,24 @@ namespace ProgrammingTasks.Controllers
             int result = _edgeOfTheOceanService.ShapeArea(n);
             return Ok(result);
         }
+        [HttpGet("MakeArrayConsecutive2")]
+        public ActionResult<int> MakeArrayConsecutive2([FromBody] int[] statues)
+        {
+            int result = _edgeOfTheOceanService.MakeArrayConsecutive2(statues);
+            return Ok(result);
+        }
+        [HttpGet("AlmostIncreasingSequence")]
+        public ActionResult<bool> AlmostIncreasingSequence([FromBody] int[] sequence)
+        {
+            bool result = _edgeOfTheOceanService.AlmostIncreasingSequence(sequence);
+            return Ok(result);
+        }
+        [HttpGet("MatrixElementsSum")]
+        public ActionResult<bool> MatrixElementsSum([FromBody] int[][] matrix)
+        {
+            int result = _edgeOfTheOceanService.MatrixElementsSum(matrix);
+            return Ok(result);
+        }
+        
     }
 }

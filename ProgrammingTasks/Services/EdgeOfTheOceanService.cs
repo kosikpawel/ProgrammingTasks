@@ -31,7 +31,7 @@ namespace ProgrammingTasks.Services
 
         public int ShapeArea(int n)
         {
-            int i = 1;
+            int i = 2;
             int sum = 1;
             while (i <= n)
             {
